@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Countdown Dashboard</title>
+    <title>Countdown 🌻</title>
 
     <style>
       body {
@@ -86,7 +86,7 @@
 
   <body>
     <div class="container">
-      <h1>🌻 Countdown 🌻</h1>
+      <h1>🌻 Countdown (avant de passer le test de citoyenneté) 🌻</h1>
 
       <div class="card fade">
         <div class="label">Jours restants</div>
@@ -130,21 +130,22 @@
         const months = Math.floor(days / 30);
         const weekends = countWeekends(now, targetDate);
 
-        // valeurs max pour les barres (simple scaling)
-        const totalDays = 365;
-        const totalMonths = 12;
-        const totalWeekends = 52;
+        const totalDays = 1095;
+        const totalMonths = 1095 / 30;
+        const totalWeekends = 1095 / 7;
+
+        // progression inversée (important)
+        const daysProgress = Math.min(100, Math.max(0, (1 - days / totalDays) * 100));
+        const monthsProgress = Math.min(100, Math.max(0, (1 - months / totalMonths) * 100));
+        const weekendsProgress = Math.min(100, Math.max(0, (1 - weekends / totalWeekends) * 100));
 
         document.getElementById('days').innerText = days;
         document.getElementById('months').innerText = months;
         document.getElementById('weekends').innerText = weekends;
 
-        document.getElementById('barDays').style.width =
-          Math.min(100, (days / totalDays) * 100) + '%';
-        document.getElementById('barMonths').style.width =
-          Math.min(100, (months / totalMonths) * 100) + '%';
-        document.getElementById('barWeekends').style.width =
-          Math.min(100, (weekends / totalWeekends) * 100) + '%';
+        document.getElementById('barDays').style.width = daysProgress + '%';
+        document.getElementById('barMonths').style.width = monthsProgress + '%';
+        document.getElementById('barWeekends').style.width = weekendsProgress + '%';
       }
 
       update();
