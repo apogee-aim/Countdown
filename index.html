@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Countdown Dashboard</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 700px;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 32px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 20px;
+        margin: 15px 0;
+        backdrop-filter: blur(10px);
+        transition: transform 0.2s ease;
+      }
+
+      .card:hover {
+        transform: scale(1.02);
+      }
+
+      .label {
+        font-size: 14px;
+        opacity: 0.7;
+      }
+
+      .value {
+        font-size: 28px;
+        margin-top: 5px;
+      }
+
+      .bar {
+        height: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        margin-top: 10px;
+        overflow: hidden;
+      }
+
+      .fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #38bdf8, #a78bfa);
+        transition: width 0.5s ease;
+      }
+
+      .fade {
+        animation: fadeIn 0.8s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>⏳ Countdown Dashboard</h1>
+
+      <div class="card fade">
+        <div class="label">Jours restants</div>
+        <div class="value" id="days">0</div>
+        <div class="bar"><div class="fill" id="barDays"></div></div>
+      </div>
+
+      <div class="card fade">
+        <div class="label">Mois restants (approx)</div>
+        <div class="value" id="months">0</div>
+        <div class="bar"><div class="fill" id="barMonths"></div></div>
+      </div>
+
+      <div class="card fade">
+        <div class="label">Week-ends restants</div>
+        <div class="value" id="weekends">0</div>
+        <div class="bar"><div class="fill" id="barWeekends"></div></div>
+      </div>
+    </div>
+
+    <script>
+      const targetDate = new Date('2026-12-31');
+
+      function countWeekends(start, end) {
+        let count = 0;
+        let d = new Date(start);
+
+        while (d <= end) {
+          const day = d.getDay();
+          if (day === 0 || day === 6) count++;
+          d.setDate(d.getDate() + 1);
+        }
+        return count;
+      }
+
+      function update() {
+        const now = new Date();
+        const diff = targetDate - now;
+
+        const days = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+        const months = Math.floor(days / 30);
+        const weekends = countWeekends(now, targetDate);
+
+        // valeurs max pour les barres (simple scaling)
+        const totalDays = 365;
+        const totalMonths = 12;
+        const totalWeekends = 52;
+
+        document.getElementById('days').innerText = days;
+        document.getElementById('months').innerText = months;
+        document.getElementById('weekends').innerText = weekends;
+
+        document.getElementById('barDays').style.width =
+          Math.min(100, (days / totalDays) * 100) + '%';
+        document.getElementById('barMonths').style.width =
+          Math.min(100, (months / totalMonths) * 100) + '%';
+        document.getElementById('barWeekends').style.width =
+          Math.min(100, (weekends / totalWeekends) * 100) + '%';
+      }
+
+      update();
+      setInterval(update, 1000);
+    </script>
+  </body>
+</html>
